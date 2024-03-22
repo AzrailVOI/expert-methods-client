@@ -17,3 +17,5 @@ pnpm start
 ```shell
 pnpm dev
 ```
+- Watch on http://localhost:5173/
+
