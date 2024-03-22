@@ -1,0 +1,12 @@
+.form{
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+.element{
+  font-size: 17pt;
+  margin-bottom: 1rem;
+  width: 70%;
+  padding: .5rem 1rem;
+}
