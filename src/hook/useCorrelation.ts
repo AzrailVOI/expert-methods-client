@@ -1,4 +1,10 @@
 export function useCorrelation(matrixValues: number[][]) {
+	if (!matrixValues.length) {
+		return {
+			correlationMatrix: [],
+			thresholdValues: []
+		}
+	}
 	const m = matrixValues.length // Количество задач
 	const n = matrixValues[0].length // Количество экспертов
 	const thresholdValues = [] // Массив пороговых значений

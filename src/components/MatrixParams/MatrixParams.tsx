@@ -1,10 +1,4 @@
-import {
-	ChangeEvent,
-	Dispatch,
-	SetStateAction,
-	SyntheticEvent,
-	useContext
-} from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useContext } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import ThresholdContext from '../../contexts/ThresholdContext.ts'
@@ -16,12 +10,14 @@ interface IMatrixParams {
 	setMatrix: Dispatch<SetStateAction<IMatrix>>
 	matrix: IMatrix
 }
+
 export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
 	const { register, setValue, handleSubmit } = useForm<IMatrix>()
 	const submitHandler: SubmitHandler<IMatrix> = data => {
 		console.log('form', data)
 		setMatrix(data)
 	}
+
 	const { thresholds, setSelectedThreshold } = useContext(ThresholdContext)
 
 	const handleChange = (
@@ -36,15 +32,19 @@ export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
 			setMatrix(prev => ({ ...prev, [input]: Number(inputValue) }))
 		}
 	}
-	function selectHandler(e: SyntheticEvent<HTMLSelectElement>) {
-		console.log(e.target)
+
+	const selectHandler = (e: ChangeEvent<HTMLSelectElement>) => {
+		const selectedValue = e.target.value
+		const regex = /^-?\d*\.?\d*$/
+ 		if (regex.test(selectedValue)) {
+			setSelectedThreshold(Number(selectedValue))
+		}
+
 	}
+
 	return (
 		<div>
-			<form
-				className={styles.form}
-				onSubmit={handleSubmit(submitHandler)}
-			>
+			<form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
 				<label>Enter experts count</label>
 				<input
 					className={styles.element}
@@ -66,24 +66,16 @@ export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
 						<label>Select threshold value</label>
 						<select
 							className={styles.element}
-							onSelect={e => selectHandler(e)}
+							onChange={selectHandler}
 						>
 							{thresholds.map((value, index) => (
-								<option
-									key={index}
-									value={value}
-								>
+								<option key={index} value={value}>
 									{value}
 								</option>
 							))}
 						</select>
 					</>
 				)}
-				{/*<input*/}
-				{/*	type='submit'*/}
-				{/*	name={'submit'}*/}
-				{/*	value={'Submit'}*/}
-				{/*/>*/}
 			</form>
 		</div>
 	)

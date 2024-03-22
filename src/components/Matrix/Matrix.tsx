@@ -1,9 +1,11 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 
+import ResultContext from '../../contexts/ResultContext.ts'
 import ThresholdContext from '../../contexts/ThresholdContext.ts'
 import { useCorrelation } from '../../hook/useCorrelation.ts'
-import { IMatrix } from '../../types/Matrix.types.ts'
-import { IResultPlane } from '../../types/ResultPlane.types.ts'
+import { useP0 } from '../../hook/useP0.ts'
+import { IMatrix, MatrixTypesEnum } from '../../types/Matrix.types.ts'
+import MatrixGraph from '../MatrixGraph/MatrixGraph.tsx'
 import MatrixItem from '../MatrixItem/MatrixItem.tsx'
 import ResultPlane from '../ResultPlane/ResultPlane.tsx'
 
@@ -13,9 +15,9 @@ export default function Matrix({ experts, tasks }: IMatrix) {
 	const [matrix, setMatrix] = useState<number[][]>(() =>
 		Array.from({ length: tasks }, () => Array(experts).fill(1))
 	)
-	const { setThresholds } = useContext(ThresholdContext)
+	const { setThresholds, selectedThreshold } = useContext(ThresholdContext)
 
-	const [results, setResults] = useState<Array<IResultPlane>>([])
+	const { results, setResults } = useContext(ResultContext)
 	const [isMatrixFilled, setIsMatrixFilled] = useState<boolean>(false)
 
 	useEffect(() => {
@@ -47,12 +49,40 @@ export default function Matrix({ experts, tasks }: IMatrix) {
 		console.log('updated', updatedMatrix)
 		setMatrix(updatedMatrix)
 	}
-	const { correlationMatrix, thresholdValues } = useCorrelation(matrix)
+	const correlationMatrix = useMemo(
+		() => useCorrelation(matrix).correlationMatrix,
+		[matrix]
+	)
+	const thresholdValues = useMemo(
+		() => useCorrelation(matrix).thresholdValues,
+		[matrix]
+	)
+
+	const p0Matrix = useMemo(
+		() => useP0(correlationMatrix, selectedThreshold).p0Matrix,
+		[correlationMatrix, selectedThreshold]
+	)
 	useEffect(() => {
-		setResults([{ label: 'Correlation Matrix', matrix: correlationMatrix }])
+		setResults(prevState => [
+			...prevState.filter(
+				prev => !(prev.label === MatrixTypesEnum.CORRELATION)
+			),
+			{ label: MatrixTypesEnum.CORRELATION, matrix: correlationMatrix }
+		])
 	}, [correlationMatrix])
 
-	setThresholds(thresholdValues)
+	useEffect(() => {
+		setThresholds(thresholdValues)
+	}, [thresholdValues])
+
+	useEffect(() => {
+		setResults(prevState => [
+			...prevState.filter(prev => !(prev.label === MatrixTypesEnum.P0)),
+			{ label: MatrixTypesEnum.P0, matrix: p0Matrix }
+		])
+	}, [p0Matrix])
+
+	// setThresholds(thresholdValues)
 
 	return (
 		<div>
@@ -77,10 +107,7 @@ export default function Matrix({ experts, tasks }: IMatrix) {
 			</div>
 			<ResultPlane results={results} />
 			<div>
-				<h2>Threshold Values</h2>
-				{thresholdValues.map(thresholdValue => (
-					<div key={thresholdValue}>({thresholdValue})</div>
-				))}
+				<MatrixGraph matrix={p0Matrix} />
 			</div>
 		</div>
 	)
