@@ -3,11 +3,13 @@ import { useContext, useEffect, useMemo, useState } from 'react'
 import ResultContext from '../../contexts/ResultContext.ts'
 import ThresholdContext from '../../contexts/ThresholdContext.ts'
 import { useCorrelation } from '../../hook/useCorrelation.ts'
+import { useMismatch } from '../../hook/useMismatch.ts'
+import { useOrdering } from '../../hook/useOrdering.ts'
 import { useP0 } from '../../hook/useP0.ts'
+import { useTranspose } from '../../hook/useTranspose.ts'
+import { Alphabet } from '../../types/Alphabet.ts'
 import { IMatrix, MatrixTypesEnum } from '../../types/Matrix.types.ts'
-import MatrixGraph from '../MatrixGraph/MatrixGraph.tsx'
 import MatrixItem from '../MatrixItem/MatrixItem.tsx'
-import ResultPlane from '../ResultPlane/ResultPlane.tsx'
 
 import styles from './Matrix.module.scss'
 
@@ -82,7 +84,35 @@ export default function Matrix({ experts, tasks }: IMatrix) {
 		])
 	}, [p0Matrix])
 
-	// setThresholds(thresholdValues)
+	useEffect(() => {
+		const transposed = useTranspose(matrix)
+
+		transposed.map((tasks, index) => {
+			console.log(`ordering ${index}\n`, useOrdering(tasks))
+			setResults(prevState => [
+				...prevState.filter(
+					prev =>
+						!(prev.label === MatrixTypesEnum.ORDERING + ' ' + Alphabet[index])
+				),
+				{
+					label: MatrixTypesEnum.ORDERING + ' ' + Alphabet[index],
+					matrix: useOrdering(tasks).orderingMatrix
+				}
+			])
+		})
+
+		setResults(prevState => [
+			...prevState.filter(prev => !(prev.label === MatrixTypesEnum.MISMATCH)),
+			{
+				label: MatrixTypesEnum.MISMATCH,
+				matrix: useMismatch(
+					results
+						.filter(result => result.label.includes(MatrixTypesEnum.ORDERING))
+						.map(res => res.matrix)
+				)
+			}
+		])
+	}, [matrix])
 
 	return (
 		<div>
@@ -104,10 +134,6 @@ export default function Matrix({ experts, tasks }: IMatrix) {
 			</div>
 			<div>
 				{isMatrixFilled ? 'All cells are filled' : 'Please fill all cells'}
-			</div>
-			<ResultPlane results={results} />
-			<div>
-				<MatrixGraph matrix={p0Matrix} />
 			</div>
 		</div>
 	)
