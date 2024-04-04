@@ -1,5 +1,10 @@
-import { ChangeEvent, Dispatch, SetStateAction, useContext } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import {
+	ChangeEvent,
+	Dispatch,
+	FormEvent,
+	SetStateAction,
+	useContext
+} from 'react'
 
 import ThresholdContext from '../../contexts/ThresholdContext.ts'
 import { IMatrix } from '../../types/Matrix.types.ts'
@@ -12,10 +17,11 @@ interface IMatrixParams {
 }
 
 export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
-	const { register, setValue, handleSubmit } = useForm<IMatrix>()
-	const submitHandler: SubmitHandler<IMatrix> = data => {
-		console.log('form', data)
-		setMatrix(data)
+	// const { register, setValue, handleSubmit } = useForm<IMatrix>({
+	// 	defaultValues: matrix
+	// })
+	const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
 	}
 
 	const { thresholds, setSelectedThreshold } = useContext(ThresholdContext)
@@ -25,31 +31,36 @@ export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
 		input: keyof IMatrix
 	) => {
 		const inputValue = e.target.value
-		const regex = /^[0-9]*$/ // Регулярное выражение, разрешающее только цифры
+		const regex = /([1-9][0-9]*$)/ // Регулярное выражение, разрешающее только цифры
 
-		if (regex.test(inputValue)) {
-			setValue(input, Number(inputValue))
+		if (regex.test(inputValue) && Number(inputValue) < 100) {
+			console.log('test', inputValue)
 			setMatrix(prev => ({ ...prev, [input]: Number(inputValue) }))
+		} else {
+			console.log('test error', inputValue)
+			setMatrix(prev => ({ ...prev, [input]: 1 }))
+			e.target.select()
 		}
 	}
 
 	const selectHandler = (e: ChangeEvent<HTMLSelectElement>) => {
 		const selectedValue = e.target.value
 		const regex = /^-?\d*\.?\d*$/
- 		if (regex.test(selectedValue)) {
+		if (regex.test(selectedValue)) {
 			setSelectedThreshold(Number(selectedValue))
 		}
-
 	}
 
 	return (
 		<div>
-			<form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
+			<form
+				className={styles.form}
+				onSubmit={(e: FormEvent<HTMLFormElement>) => submitHandler(e)}
+			>
 				<label>Enter experts count</label>
 				<input
 					className={styles.element}
 					type='text'
-					{...register('experts')}
 					value={matrix.experts}
 					onChange={e => handleChange(e, 'experts')}
 				/>
@@ -57,7 +68,6 @@ export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
 				<input
 					className={styles.element}
 					type='text'
-					{...register('tasks')}
 					value={matrix.tasks}
 					onChange={e => handleChange(e, 'tasks')}
 				/>
@@ -69,7 +79,10 @@ export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
 							onChange={selectHandler}
 						>
 							{thresholds.map((value, index) => (
-								<option key={index} value={value}>
+								<option
+									key={index}
+									value={value}
+								>
 									{value}
 								</option>
 							))}

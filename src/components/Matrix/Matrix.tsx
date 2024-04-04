@@ -100,7 +100,9 @@ export default function Matrix({ experts, tasks }: IMatrix) {
 				}
 			])
 		})
+	}, [matrix])
 
+	useEffect(() => {
 		setResults(prevState => [
 			...prevState.filter(prev => !(prev.label === MatrixTypesEnum.MISMATCH)),
 			{
