@@ -91,7 +91,8 @@ export default function Matrix({ experts, tasks }: IMatrix) {
 			console.log(`ordering ${index}\n`, useOrdering(tasks))
 			setResults(prevState => [
 				...prevState.filter(
-					prev => !prev.label.includes(MatrixTypesEnum.ORDERING)
+					prev =>
+						!(prev.label === MatrixTypesEnum.ORDERING + ' ' + Alphabet[index])
 				),
 				{
 					label: MatrixTypesEnum.ORDERING + ' ' + Alphabet[index],
