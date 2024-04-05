@@ -6,6 +6,7 @@ const ThresholdContext = createContext<IThresholdContext>({
 	thresholds: [],
 	setThresholds: () => {},
 	selectedThreshold: 1,
-	setSelectedThreshold: () => {}
+	setSelectedThreshold: () => {},
+	currentMethod: 'agreement'
 })
 export default ThresholdContext

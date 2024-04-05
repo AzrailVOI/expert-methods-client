@@ -1,9 +1,6 @@
 export function useCorrelation(matrixValues: number[][]) {
 	if (!matrixValues.length) {
-		return {
-			correlationMatrix: [],
-			thresholdValues: []
-		}
+		return []
 	}
 	const m = matrixValues.length // Количество задач
 	const n = matrixValues[0].length // Количество экспертов
@@ -31,8 +28,5 @@ export function useCorrelation(matrixValues: number[][]) {
 		}
 		correlationMatrix.push(correlationRow)
 	}
-	return {
-		correlationMatrix,
-		thresholdValues: [...new Set(thresholdValues)].sort()
-	}
+	return correlationMatrix
 }

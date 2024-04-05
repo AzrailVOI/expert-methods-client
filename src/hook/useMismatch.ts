@@ -1,7 +1,16 @@
-export function useMismatch(matrixes: number[][][]): number[][] {
+interface IMismatch {
+	mismatchMatrix: number[][]
+	generalSum: number
+	sums: number[]
+}
+export function useMismatch(matrixes: number[][][]): IMismatch {
 	// Проверяем, что входной массив не пуст или содержит только одну матрицу
 	if (!matrixes.length || matrixes.length < 2) {
-		return []
+		return {
+			mismatchMatrix: [],
+			generalSum: 0,
+			sums: []
+		}
 	}
 
 	// Получаем количество матриц во входном массиве
@@ -38,6 +47,18 @@ export function useMismatch(matrixes: number[][][]): number[][] {
 	}
 	console.log('FULL M', mismatchMatrix)
 
+	let sums: number[] = []
+	for (let i = 0; i < mismatchMatrix.length; i++) {
+		let sum = 0
+		for (let j = 0; j < mismatchMatrix[i].length; j++) {
+			sum += mismatchMatrix[i][j]
+		}
+		sums.push(sum)
+	}
+
+	let generalSum = 0
+	sums.forEach(sum => (generalSum += sum))
+
 	// Возвращаем полученную матрицу расхождений
-	return mismatchMatrix
+	return { mismatchMatrix, generalSum, sums }
 }
