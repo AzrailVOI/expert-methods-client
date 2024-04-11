@@ -9,11 +9,11 @@ npm i -g pnpm@latest
 ```shell
 pnpm i
 ```
-- Start in standard mode
+- Build in standard mode
 ```shell
-pnpm start
+pnpm build
 ```
-- Start in dev mode
+- Start in development mode
 ```shell
 pnpm dev
 ```
