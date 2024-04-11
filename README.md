@@ -9,7 +9,7 @@ npm i -g pnpm@latest
 ```shell
 pnpm i
 ```
-- Build in standard mode
+- Build the project
 ```shell
 pnpm build
 ```
