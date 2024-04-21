@@ -8,5 +8,6 @@ export function useThreshold(matrix: number[][]): number[] {
 			thresholdValues.push(parseFloat(matrix[i][j].toFixed(2)))
 		}
 	}
+	console.log('thresholdValues', thresholdValues)
 	return [...new Set(thresholdValues)].sort()
 }

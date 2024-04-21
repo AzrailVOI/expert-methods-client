@@ -1,14 +1,17 @@
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
-import MismatchContext from '../../contexts/MismatchContext.ts'
-import ResultContext from '../../contexts/ResultContext.ts'
-import ThresholdContext from '../../contexts/ThresholdContext.ts'
 import { useCorrelation } from '../../hook/useCorrelation.ts'
 import { useMismatch } from '../../hook/useMismatch.ts'
 import { useOrdering } from '../../hook/useOrdering.ts'
 import { useP0 } from '../../hook/useP0.ts'
 import { useThreshold } from '../../hook/useThreshold.ts'
 import { useTranspose } from '../../hook/useTranspose.ts'
+import { useTypedSelector } from '../../hook/useTypedSelector.ts'
+import { setSumsMismatch } from '../../redux/mismatch/mismatch.slice.ts'
+import { addOrderingMatrix } from '../../redux/ordering/ordering.slice.ts'
+import { addResult } from '../../redux/results/results.slice.ts'
+import { setThresholds } from '../../redux/thresholds/thresholds.slice.ts'
 import { Alphabet } from '../../types/Alphabet.ts'
 import { IMatrix, MatrixTypesEnum } from '../../types/Matrix.types.ts'
 import MatrixItem from '../MatrixItem/MatrixItem.tsx'
@@ -19,12 +22,13 @@ export default function Matrix({ experts, tasks }: IMatrix) {
 	const [matrix, setMatrix] = useState<number[][]>(() =>
 		Array.from({ length: tasks }, () => Array(experts).fill(1))
 	)
-	const { setThresholds, selectedThreshold, currentMethod } =
-		useContext(ThresholdContext)
+	const dispatch = useDispatch()
+	const { selectedThreshold, currentMethod } = useTypedSelector(
+		state => state.thresholds
+	)
 
-	const { results, setResults } = useContext(ResultContext)
 	const [isMatrixFilled, setIsMatrixFilled] = useState<boolean>(false)
-	const { setSumsMismatch } = useContext(MismatchContext)
+	const ordering = useTypedSelector(state => state.ordering)
 
 	useEffect(() => {
 		setMatrix(prevMatrix => {
@@ -56,17 +60,12 @@ export default function Matrix({ experts, tasks }: IMatrix) {
 		setMatrix(updatedMatrix)
 	}
 	const correlationMatrix = useMemo(() => useCorrelation(matrix), [matrix])
-
 	const mismatchMatrix = useMemo(
-		() =>
-			useMismatch(
-				results
-					.filter(result => result.label.includes(MatrixTypesEnum.ORDERING))
-					.map(res => res.matrix)
-			).mismatchMatrix,
-		[results]
+		() => useMismatch(ordering.map(res => res.orderingMatrix)).mismatchMatrix,
+		[ordering]
 	)
 	console.log('mismatchMatrix', mismatchMatrix)
+	console.log('ordering', ordering)
 	const p0Matrix = useMemo(
 		() =>
 			useP0(
@@ -81,80 +80,76 @@ export default function Matrix({ experts, tasks }: IMatrix) {
 			useThreshold(
 				currentMethod === 'agreement' ? correlationMatrix : mismatchMatrix
 			),
-		[correlationMatrix, currentMethod]
+		[correlationMatrix, currentMethod, mismatchMatrix]
 	)
+	console.log('thresholdValues', thresholdValues)
 	const mismatchSums = useMemo(
-		() =>
-			useMismatch(
-				results
-					.filter(result => result.label.includes(MatrixTypesEnum.ORDERING))
-					.map(res => res.matrix)
-			).sums,
-		[results]
+		() => useMismatch(ordering.map(res => res.orderingMatrix)).sums,
+		[ordering]
 	)
 	const mismatchGeneralSum = useMemo(
-		() =>
-			useMismatch(
-				results
-					.filter(result => result.label.includes(MatrixTypesEnum.ORDERING))
-					.map(res => res.matrix)
-			).generalSum,
-		[results]
+		() => useMismatch(ordering.map(res => res.orderingMatrix)).generalSum,
+		[ordering]
 	)
 
 	useEffect(() => {
-		setSumsMismatch({
-			generalSum: mismatchGeneralSum,
-			sums: mismatchSums
-		})
+		dispatch(
+			setSumsMismatch({
+				generalSum: mismatchGeneralSum,
+				sums: mismatchSums
+			})
+		)
 	}, [mismatchGeneralSum, mismatchSums])
 	useEffect(() => {
-		setResults(prevState => [
-			...prevState.filter(
-				prev => !(prev.label === MatrixTypesEnum.CORRELATION)
-			),
-			{ label: MatrixTypesEnum.CORRELATION, matrix: correlationMatrix }
-		])
+		dispatch(
+			addResult({
+				label: MatrixTypesEnum.CORRELATION,
+				matrix: correlationMatrix
+			})
+		)
 	}, [correlationMatrix])
 
 	useEffect(() => {
-		setThresholds(thresholdValues)
+		dispatch(setThresholds(thresholdValues))
 	}, [thresholdValues])
 
 	useEffect(() => {
-		setResults(prevState => [
-			...prevState.filter(prev => !(prev.label === MatrixTypesEnum.P0)),
-			{ label: MatrixTypesEnum.P0, matrix: p0Matrix }
-		])
+		dispatch(
+			addResult({
+				label: MatrixTypesEnum.P0,
+				matrix: p0Matrix
+			})
+		)
 	}, [p0Matrix])
 
 	useEffect(() => {
 		const transposed = useTranspose(matrix)
-
-		transposed.map((tasks, index) => {
-			console.log(`ordering ${index}\n`, useOrdering(tasks))
-			setResults(prevState => [
-				...prevState.filter(
-					prev =>
-						!(prev.label === MatrixTypesEnum.ORDERING + ' ' + Alphabet[index])
-				),
-				{
+		transposed.forEach((tasks, index) => {
+			const orderingData = useOrdering(tasks)
+			console.log(`ordering ${index}\n`, orderingData)
+			dispatch(
+				addResult({
 					label: MatrixTypesEnum.ORDERING + ' ' + Alphabet[index],
-					matrix: useOrdering(tasks).orderingMatrix
-				}
-			])
+					matrix: orderingData.orderingMatrix
+				})
+			)
+			dispatch(
+				addOrderingMatrix({
+					orderingLetter: Alphabet[index],
+					orderingMatrix: orderingData.orderingMatrix
+				})
+			)
 		})
 	}, [matrix])
 
 	useEffect(() => {
-		setResults(prevState => [
-			...prevState.filter(prev => !(prev.label === MatrixTypesEnum.MISMATCH)),
-			{
+		dispatch(
+			addResult({
 				label: MatrixTypesEnum.MISMATCH,
 				matrix: mismatchMatrix
-			}
-		])
-	}, [matrix])
+			})
+		)
+	}, [mismatchMatrix])
 
 	return (
 		<div>

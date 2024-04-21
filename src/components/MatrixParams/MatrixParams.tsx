@@ -1,12 +1,8 @@
-import {
-	ChangeEvent,
-	Dispatch,
-	FormEvent,
-	SetStateAction,
-	useContext
-} from 'react'
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction } from 'react'
+import { useDispatch } from 'react-redux'
 
-import ThresholdContext from '../../contexts/ThresholdContext.ts'
+import { useTypedSelector } from '../../hook/useTypedSelector.ts'
+import { setSelectedThreshold } from '../../redux/thresholds/thresholds.slice.ts'
 import { IMatrix } from '../../types/Matrix.types.ts'
 
 import styles from './MatrixParams.module.scss'
@@ -24,8 +20,8 @@ export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
 		e.preventDefault()
 	}
 
-	const { thresholds, setSelectedThreshold } = useContext(ThresholdContext)
-
+	const { thresholds } = useTypedSelector(state => state.thresholds)
+	const dispatch = useDispatch()
 	const handleChange = (
 		e: ChangeEvent<HTMLInputElement>,
 		input: keyof IMatrix
@@ -47,7 +43,7 @@ export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
 		const selectedValue = e.target.value
 		const regex = /^-?\d*\.?\d*$/
 		if (regex.test(selectedValue)) {
-			setSelectedThreshold(Number(selectedValue))
+			dispatch(setSelectedThreshold(Number(selectedValue)))
 		}
 	}
 
