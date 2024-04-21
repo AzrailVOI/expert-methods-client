@@ -28,8 +28,8 @@ function App() {
 		sums: []
 	})
 	return (
-		<MismatchContext.Provider value={{ ...sumsMismatch, setSumsMismatch }}>
-			<ResultContext.Provider value={{ results, setResults }}>
+		<ResultContext.Provider value={{ results, setResults }}>
+			<MismatchContext.Provider value={{ ...sumsMismatch, setSumsMismatch }}>
 				<ThresholdContext.Provider
 					value={{
 						thresholds,
@@ -106,8 +106,8 @@ function App() {
 						/>
 					</div>
 				</ThresholdContext.Provider>
-			</ResultContext.Provider>
-		</MismatchContext.Provider>
+			</MismatchContext.Provider>
+		</ResultContext.Provider>
 	)
 }
 
