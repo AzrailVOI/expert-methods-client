@@ -66,6 +66,7 @@ export default function Matrix({ experts, tasks }: IMatrix) {
 			).mismatchMatrix,
 		[results]
 	)
+	console.log('mismatchMatrix', mismatchMatrix)
 	const p0Matrix = useMemo(
 		() =>
 			useP0(
@@ -174,7 +175,7 @@ export default function Matrix({ experts, tasks }: IMatrix) {
 				))}
 			</div>
 			<div>
-				{isMatrixFilled ? 'All cells are filled' : 'Please fill all cells'}
+				{isMatrixFilled ? 'Все ячейки заполнены' : 'Не все ячейки заполнены'}
 			</div>
 		</div>
 	)

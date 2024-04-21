@@ -27,6 +27,7 @@ function App() {
 		generalSum: 0,
 		sums: []
 	})
+	console.log('app')
 	return (
 		<MismatchContext.Provider value={{ ...sumsMismatch, setSumsMismatch }}>
 			<ResultContext.Provider value={{ results, setResults }}>
@@ -46,7 +47,7 @@ function App() {
 								tasks={Number(matrix.tasks)}
 							/>
 							<div>
-								<h2>Current method: {method}</h2>
+								<h2>Текущий метод: {method}</h2>
 								<button
 									className={styles.button}
 									onClick={() => {
@@ -56,8 +57,8 @@ function App() {
 									}}
 								>
 									{method === 'agreement'
-										? 'Switch to mismatch method'
-										: 'Switch to agreement method'}
+										? 'Переключить на метод расхождения'
+										: 'Переключить на метод согласования'}
 								</button>
 							</div>
 							<ResultPlane
@@ -82,11 +83,11 @@ function App() {
 									<h1>Degrees of mismatch</h1>
 									{sumsMismatch.sums.map((sum, index) => (
 										<div key={index}>
-											Degree of mismatch for expert {Alphabet[index]}: {sum}
+											Степень рассогласования эксперта {Alphabet[index]}: {sum}
 										</div>
 									))}
 									<div>
-										General degree of mismatch: {sumsMismatch.generalSum}
+										Общая степень рассогласования: {sumsMismatch.generalSum}
 									</div>
 								</>
 							)}

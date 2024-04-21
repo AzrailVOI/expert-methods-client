@@ -3,8 +3,8 @@ export interface IMatrix {
 	tasks: number
 }
 export enum MatrixTypesEnum {
-	CORRELATION = 'Correlation Matrix',
-	P0 = 'Agreement Matrix',
-	ORDERING = 'Ordering Matrix',
-	MISMATCH = 'Mismatch Matrix'
+	CORRELATION = 'Матрица корреляции',
+	P0 = 'Матрица графа',
+	ORDERING = 'Матрица упорядочивания',
+	MISMATCH = 'Матрица расхождения'
 }

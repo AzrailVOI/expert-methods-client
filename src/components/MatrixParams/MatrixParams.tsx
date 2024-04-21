@@ -57,14 +57,14 @@ export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
 				className={styles.form}
 				onSubmit={(e: FormEvent<HTMLFormElement>) => submitHandler(e)}
 			>
-				<label>Enter experts count</label>
+				<label>Введите количество экспертов</label>
 				<input
 					className={styles.element}
 					type='text'
 					value={matrix.experts}
 					onChange={e => handleChange(e, 'experts')}
 				/>
-				<label>Enter tasks count</label>
+				<label>Введите количество задач</label>
 				<input
 					className={styles.element}
 					type='text'
@@ -73,7 +73,7 @@ export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
 				/>
 				{thresholds.length > 0 && (
 					<>
-						<label>Select threshold value</label>
+						<label>Выберите пороговое значение</label>
 						<select
 							className={styles.element}
 							onChange={selectHandler}
