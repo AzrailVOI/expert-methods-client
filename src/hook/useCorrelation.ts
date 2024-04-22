@@ -4,7 +4,6 @@ export function useCorrelation(matrixValues: number[][]) {
 	}
 	const m = matrixValues.length // Количество задач
 	const n = matrixValues[0].length // Количество экспертов
-	const thresholdValues = [] // Массив пороговых значений
 	// Вычисляем матрицу корреляции
 	const correlationMatrix: number[][] = []
 
@@ -22,7 +21,6 @@ export function useCorrelation(matrixValues: number[][]) {
 				const numerator = 6 * sumDiffSquared
 				const denominator = Math.pow(m, 3) - m
 				const correlation = 1 - numerator / denominator
-				thresholdValues.push(parseFloat(correlation.toFixed(2)))
 				correlationRow.push(parseFloat(correlation.toFixed(2))) // Округляем до двух знаков после запятой и добавляем в матрицу
 			}
 		}

@@ -35,14 +35,13 @@ export function useMismatch(matrixes: number[][][]): IMismatch {
 			// Проходим по каждому элементу обеих матриц и суммируем модули их разностей
 			for (let row = 0; row < matrixSize; row++) {
 				for (let col = 0; col < matrixSize; col++) {
-					mismatchCount += Math.abs(
-						matrixes[i][row][col] - matrixes[j][row][col]
-					)
+					mismatchCount +=
+						(1 / 2) * Math.abs(matrixes[i][row][col] - matrixes[j][row][col])
 				}
 			}
 			// Записываем количество расхождений в соответствующие ячейки матрицы расхождений
-			mismatchMatrix[i][j] = mismatchCount / 2
-			mismatchMatrix[j][i] = mismatchCount / 2 // Зеркально заполняем для симметрии
+			mismatchMatrix[i][j] = mismatchCount
+			mismatchMatrix[j][i] = mismatchCount // Зеркально заполняем для симметрии
 		}
 	}
 	console.log('FULL M', mismatchMatrix)

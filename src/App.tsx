@@ -34,7 +34,7 @@ function App() {
 				<div>
 					<h2>
 						Текущий метод:{' '}
-						{currentMethod === 'agreement' ? 'согласованиe' : 'расхождениe'}
+						{currentMethod === 'agreement' ? 'согласованиe' : 'рассогласование'}
 					</h2>
 					<button
 						className={styles.button}
@@ -47,7 +47,7 @@ function App() {
 						}}
 					>
 						{currentMethod === 'agreement'
-							? 'Переключить на метод расхождения'
+							? 'Переключить на метод рассогласования'
 							: 'Переключить на метод согласования'}
 					</button>
 				</div>

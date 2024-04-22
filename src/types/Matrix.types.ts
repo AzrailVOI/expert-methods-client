@@ -6,5 +6,5 @@ export enum MatrixTypesEnum {
 	CORRELATION = 'Матрица корреляции',
 	P0 = 'Матрица графа',
 	ORDERING = 'Матрица упорядочивания',
-	MISMATCH = 'Матрица расхождения'
+	MISMATCH = 'Матрица рассогласования'
 }
