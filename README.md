@@ -1,6 +1,6 @@
 # Experts methods
 
-## React + TypeScript + Vite
+[React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) + [Vite](https://vitejs.dev/)
 
 ## Getting start with Docker
 
