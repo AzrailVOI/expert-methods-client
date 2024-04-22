@@ -7,7 +7,7 @@
 ```shell
 docker run -d -p 3000:8080 azrailvo/expert-methods
 ```
-
+watch on http://localhost:3000/
 
 ## Getting start with NodeJS
 
