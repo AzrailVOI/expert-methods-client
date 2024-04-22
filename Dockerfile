@@ -1,10 +1,16 @@
 FROM node
 
+# Создаем рабочую директорию
 WORKDIR /app
-COPY . /app
 
-EXPOSE 5173
+# Копируем статические файлы в рабочую директорию
+COPY dist /app
 
-RUN npm install -g pnpm
-RUN pnpm i
-CMD ["pnpm", "dev"]
+# Установка http-server для запуска статического веб-сервера
+RUN npm install -g http-server
+
+# Указываем порт, который будет прослушивать веб-сервер
+EXPOSE 8080
+
+# Команда для запуска http-server и обслуживания содержимого каталога /app
+CMD ["http-server", "-p", "8080"]
