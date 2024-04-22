@@ -1,16 +1,16 @@
 # Experts methods
 
-## React + TypeScript + Vite 
-
-## Requirements
-
-- [NodeJS](https://nodejs.org)
+## React + TypeScript + Vite
 
 ## Getting start with Docker
 
 ```shell
 docker run -d -p 3000:8080 azrailvo/expert-methods
 ```
+
+## Requirements
+
+- [NodeJS](https://nodejs.org)
 
 ## Getting start with NodeJS
 - Install PNPM
