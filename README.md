@@ -6,7 +6,13 @@
 
 - [NodeJS](https://nodejs.org)
 
-## Getting start
+## Getting start with Docker
+
+```shell
+docker run -d -p 3000:8080 azrailvo/expert-methods
+```
+
+## Getting start with NodeJS
 - Install PNPM
 ```shell
 npm i -g pnpm@latest
