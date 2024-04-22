@@ -8,11 +8,13 @@
 docker run -d -p 3000:8080 azrailvo/expert-methods
 ```
 
-## Requirements
-
-- [NodeJS](https://nodejs.org)
 
 ## Getting start with NodeJS
+
+### Requirements
+
+[NodeJS](https://nodejs.org)
+
 - Install PNPM
 ```shell
 npm i -g pnpm@latest
