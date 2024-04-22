@@ -69,7 +69,7 @@ const MatrixGraph: FC<IMatrixGraphProps> = ({ matrix }) => {
 		}
 		return (
 			<div className={styles.graph}>
-				<h2>Граф</h2>
+				<h2 style={{fontSize: '20pt'}}>Граф</h2>
 				<Graphviz
 					dot={createGraphFromMatrix(matrix)}
 					options={options}

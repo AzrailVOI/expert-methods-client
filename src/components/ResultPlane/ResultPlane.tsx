@@ -11,7 +11,7 @@ export default function ResultPlane({ results }: Props) {
 		<div className={styles.result}>
 			{results.map((result, index) => (
 				<div key={index}>
-					<h2>{result.label}</h2>
+					<h2 className={styles.title}>{result.label}</h2>
 					{result.matrix.map((row, rowIndex) => (
 						<div key={rowIndex}>
 							{row.map((cell, columnIndex) => (

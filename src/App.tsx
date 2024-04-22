@@ -32,7 +32,7 @@ function App() {
 					tasks={Number(matrix.tasks)}
 				/>
 				<div>
-					<h2>
+					<h2 className={styles.title}>
 						Текущий метод:{' '}
 						{currentMethod === 'agreement' ? 'согласованиe' : 'рассогласование'}
 					</h2>
@@ -70,13 +70,13 @@ function App() {
 				/>
 				{currentMethod === 'mismatch' && (
 					<>
-						<h1>Степени рассогласования</h1>
+						<h1 className={styles.title}>Степени рассогласования</h1>
 						{sumsMismatch.sums.map((sum, index) => (
-							<div key={index}>
+							<div key={index} className={styles.subtitle}>
 								Степень рассогласования эксперта {Alphabet[index]}: {sum}
 							</div>
 						))}
-						<div>Общая степень рассогласования: {sumsMismatch.generalSum}</div>
+						<div className={styles.subtitle}>Общая степень рассогласования: {sumsMismatch.generalSum}</div>
 					</>
 				)}
 				<div>

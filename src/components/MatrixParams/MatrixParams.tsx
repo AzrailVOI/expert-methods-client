@@ -6,6 +6,8 @@ import { setSelectedThreshold } from '../../redux/thresholds/thresholds.slice.ts
 import { IMatrix } from '../../types/Matrix.types.ts'
 
 import styles from './MatrixParams.module.scss'
+import {resetOrdering} from "../../redux/ordering/ordering.slice.ts";
+import {resetOrderingResult} from "../../redux/results/results.slice.ts";
 
 interface IMatrixParams {
 	setMatrix: Dispatch<SetStateAction<IMatrix>>
@@ -26,7 +28,7 @@ export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
 		const inputValue = e.target.value
 		const regex = /([1-9][0-9]*$)/ // Регулярное выражение, разрешающее только цифры
 
-		if (regex.test(inputValue) && Number(inputValue) < 100) {
+		if (regex.test(inputValue) && Number(inputValue) <= 10) {
 			console.log('test', inputValue)
 			setMatrix(prev => ({ ...prev, [input]: Number(inputValue) }))
 		} else {
@@ -34,6 +36,8 @@ export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
 			setMatrix(prev => ({ ...prev, [input]: 1 }))
 			e.target.select()
 		}
+		dispatch(resetOrdering())
+		dispatch(resetOrderingResult())
 	}
 
 	const selectHandler = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -50,14 +54,14 @@ export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
 				className={styles.form}
 				onSubmit={(e: FormEvent<HTMLFormElement>) => submitHandler(e)}
 			>
-				<label>Введите количество экспертов</label>
+				<label className={styles.label}>Введите количество экспертов</label>
 				<input
 					className={styles.element}
 					type='text'
 					value={matrix.experts}
 					onChange={e => handleChange(e, 'experts')}
 				/>
-				<label>Введите количество задач</label>
+				<label className={styles.label}>Введите количество задач</label>
 				<input
 					className={styles.element}
 					type='text'
@@ -66,7 +70,7 @@ export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
 				/>
 				{thresholds.length > 0 && (
 					<>
-						<label>Выберите пороговое значение</label>
+						<label className={styles.label}>Выберите пороговое значение</label>
 						<select
 							className={styles.element}
 							onChange={selectHandler}

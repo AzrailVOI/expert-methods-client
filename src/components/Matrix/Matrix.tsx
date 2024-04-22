@@ -169,7 +169,7 @@ export default function Matrix({ experts, tasks }: IMatrix) {
 					</div>
 				))}
 			</div>
-			<div>
+			<div style={{fontSize: '12pt'}}>
 				{isMatrixFilled ? 'Все ячейки заполнены' : 'Не все ячейки заполнены'}
 			</div>
 		</div>

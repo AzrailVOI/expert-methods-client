@@ -19,10 +19,13 @@ export const orderingSlice = createSlice({
 					orderingLetter: action.payload.orderingLetter,
 					orderingMatrix: action.payload.orderingMatrix
 				})
+		},
+		resetOrdering: () => {
+			return []
 		}
 	}
 })
 
-export const { addOrderingMatrix } = orderingSlice.actions
+export const { addOrderingMatrix, resetOrdering } = orderingSlice.actions
 
 export default orderingSlice.reducer

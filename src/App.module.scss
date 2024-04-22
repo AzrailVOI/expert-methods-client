@@ -1,7 +1,8 @@
 .page{
     display: grid;
-    grid-template-columns: 2.5fr 1fr;
+    grid-template-columns: 3fr 1fr;
     background-color: #242424;
+    gap: .5rem;
     color: white;
     font-size: 20pt;
 }
@@ -14,13 +15,19 @@
     border: 1px solid white;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 17pt;
+    font-size: 13pt;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
+    font-weight: bold;
     color: white;
     background-color: #242424;
-    padding: 1rem;
+    padding: .7rem;
     &:hover{
         background-color: #3D3D3D;
     }
+}
+.title{
+    font-size: 20pt;
+}
+.subtitle{
+    font-size: 13pt;
 }
