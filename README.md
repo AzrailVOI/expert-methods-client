@@ -1,4 +1,10 @@
-# React + TypeScript + Vite
+# Experts methods
+
+## React + TypeScript + Vite 
+
+## Requirements
+
+- [NodeJS](https://nodejs.org)
 
 ## Getting start
 - Install PNPM
@@ -9,13 +15,14 @@ npm i -g pnpm@latest
 ```shell
 pnpm i
 ```
-- Build the project
+- You can build the project
 ```shell
 pnpm build
 ```
-- Start in development mode
+and watch ``index.html`` in ``dist`` folder
+- OR start in development mode
 ```shell
 pnpm dev
 ```
-- Watch on http://localhost:5173/
+and watch on http://localhost:5173/
 
