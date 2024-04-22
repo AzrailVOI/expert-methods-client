@@ -13,9 +13,6 @@ interface IMatrixParams {
 }
 
 export default function MatrixParams({ setMatrix, matrix }: IMatrixParams) {
-	// const { register, setValue, handleSubmit } = useForm<IMatrix>({
-	// 	defaultValues: matrix
-	// })
 	const submitHandler = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 	}
